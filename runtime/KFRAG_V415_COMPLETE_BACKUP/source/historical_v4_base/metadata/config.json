@@ -1,0 +1,33 @@
+{
+  "V4_K": 6,
+  "V4_N": 16,
+  "V4_TOKEN_BYTES": 6,
+  "V4_AUTH_BYTES": 6,
+  "CAL_AMPLITUDE": 0.014,
+  "CAL_ACTIVE_TAG_BITS": 8,
+  "BATCH_PLACEMENTS": 24,
+  "COARSE_STRIDE": 4,
+  "TOP_COARSE": 20,
+  "REFINE_RADIUS": 6,
+  "TOP_STRICT": 20,
+  "MAX_BLIND_PLACEMENTS": 20,
+  "V45_AREAS": [
+    0.4,
+    0.3,
+    0.25
+  ],
+  "V45_AREA_WEIGHTS": [
+    0.15,
+    0.25,
+    0.6
+  ],
+  "V45_EPOCHS": 5,
+  "V45_SAMPLES_PER_EPOCH": 3000,
+  "V45_LR": 0.0002,
+  "V45_WEIGHT_DECAY": 1e-05,
+  "V45_GRAD_ACCUM": 4,
+  "V45_MIN_VISIBILITY": 0.1,
+  "V45_SEED": 20261475,
+  "best_auth_epoch_v45": 1,
+  "best_auth_score_v45": 0.97475
+}

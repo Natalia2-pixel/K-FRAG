@@ -1,0 +1,37 @@
+[
+  {
+    "name": "NEXT_SESSION_README.txt",
+    "size_bytes": 1738,
+    "sha256": "40e83d35d826e837f6ccc16c3a92d7f59287801547fc59b43a70229f0c1cb03b"
+  },
+  {
+    "name": "auth_symbol_head_v415.pt",
+    "size_bytes": 545489,
+    "sha256": "fcef9aedf5467b24c067a149304f14e9c44eecffc6ce4ae6973bac3d9e9deba1"
+  },
+  {
+    "name": "key_fingerprint.txt",
+    "size_bytes": 87,
+    "sha256": "431fd54ede546faea8201c4ae72aa91a0c082df31212b6f59ba249aaf161f7c8"
+  },
+  {
+    "name": "kfrag_v415_symbol_heads.pt",
+    "size_bytes": 1089683,
+    "sha256": "1de556594a7626f54999429def568a5c2fa0703e3141b23a68a9c53844bb08be"
+  },
+  {
+    "name": "v415_config.json",
+    "size_bytes": 828,
+    "sha256": "132f892eba1c688b06b17d3561f6f87681a88dd853fda31e0321dd7ee6304913"
+  },
+  {
+    "name": "v415_recovery_functions.py",
+    "size_bytes": 40346,
+    "sha256": "a5df4368cd51f588d7ca3019f09b8f82a847f7a1714fba13c0242939048205f2"
+  },
+  {
+    "name": "weak_symbol_head_v415.pt",
+    "size_bytes": 545489,
+    "sha256": "e5544cc9a22c9a7a5a2b282844b4a98f5a89815c74b9f817d3bd73e141ddfd21"
+  }
+]

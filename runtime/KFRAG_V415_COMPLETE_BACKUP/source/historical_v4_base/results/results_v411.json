@@ -1,0 +1,13 @@
+{
+  "0.4": {
+    "images": 200,
+    "correct": 0.82,
+    "wrong": 0.0,
+    "unresolved": 0.18,
+    "ambiguous": 0.0,
+    "exact_xy": 0.515,
+    "within2_xy": 0.515,
+    "mean_spatial_rank": 1.5609756097560976,
+    "mean_runtime_s": 10.932147587080145
+  }
+}

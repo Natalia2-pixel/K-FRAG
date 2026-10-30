@@ -1,0 +1,14 @@
+{
+  "train_ids.txt": {
+    "count": 100000,
+    "source_variable": "adapter_train_paths"
+  },
+  "dev_ids.txt": {
+    "count": 5000,
+    "source_variable": "adapter_dev_paths"
+  },
+  "locked_final_ids.txt": {
+    "count": 13287,
+    "source_variable": "locked_final_paths"
+  }
+}

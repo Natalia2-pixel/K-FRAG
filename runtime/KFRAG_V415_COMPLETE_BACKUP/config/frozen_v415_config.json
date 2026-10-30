@@ -1,0 +1,46 @@
+{
+  "V4_K": 6,
+  "V4_N": 16,
+  "V4_TOKEN_BYTES": 6,
+  "V4_AUTH_BYTES": 6,
+  "V4_SOURCE_DOMAIN": {
+    "type": "bytes",
+    "hex": "4b465241472d56342d534f555243452d544f4b454e3438"
+  },
+  "V4_AUTH_DOMAIN": {
+    "type": "bytes",
+    "hex": "4b465241472d56342d415554482d5441473438"
+  },
+  "CAL_AMPLITUDE": 0.014,
+  "CAL_ACTIVE_TAG_BITS": 8,
+  "BATCH_PLACEMENTS": 24,
+  "COARSE_STRIDE": 2,
+  "TOP_COARSE": 60,
+  "REFINE_RADIUS": 10,
+  "TOP_STRICT": 20,
+  "MAX_BLIND_PLACEMENTS": 20,
+  "V415_RECOVERY": {
+    "phase_top_k": 5,
+    "phase_step": 16,
+    "strong_search": {
+      "coarse_stride": 2,
+      "top_coarse": 60,
+      "refine_radius": 10
+    },
+    "coupled_subset": {
+      "pool": 8,
+      "choose": 6
+    },
+    "decoupled_subset": {
+      "source_pool": 8,
+      "auth_pool": 8,
+      "choose": 6
+    },
+    "soft_auth": {
+      "source_pool": 8,
+      "auth_pool": 8,
+      "auth_top_k": 4,
+      "min_auth_support": 6
+    }
+  }
+}

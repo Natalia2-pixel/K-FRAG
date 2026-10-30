@@ -1,0 +1,104 @@
+========================================================================================================================
+verification_model
+========================================================================================================================
+KFRAGRegionalRefinerV2(
+  (image_encoder): MultiScaleRegionalEncoder(
+    (branch_local): Sequential(
+      (0): Conv2d(3, 32, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1))
+      (1): GroupNorm(8, 32, eps=1e-05, affine=True)
+      (2): SiLU()
+      (3): Conv2d(32, 32, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1))
+      (4): GroupNorm(8, 32, eps=1e-05, affine=True)
+      (5): SiLU()
+    )
+    (branch_dilated): Sequential(
+      (0): Conv2d(3, 32, kernel_size=(3, 3), stride=(1, 1), padding=(2, 2), dilation=(2, 2))
+      (1): GroupNorm(8, 32, eps=1e-05, affine=True)
+      (2): SiLU()
+      (3): Conv2d(32, 32, kernel_size=(3, 3), stride=(1, 1), padding=(4, 4), dilation=(4, 4))
+      (4): GroupNorm(8, 32, eps=1e-05, affine=True)
+      (5): SiLU()
+    )
+    (branch_context): Sequential(
+      (0): AvgPool2d(kernel_size=2, stride=2, padding=0)
+      (1): Conv2d(3, 32, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1))
+      (2): GroupNorm(8, 32, eps=1e-05, affine=True)
+      (3): SiLU()
+      (4): Conv2d(32, 32, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1))
+      (5): GroupNorm(8, 32, eps=1e-05, affine=True)
+      (6): SiLU()
+    )
+    (fuse): Sequential(
+      (0): Conv2d(96, 64, kernel_size=(1, 1), stride=(1, 1))
+      (1): GroupNorm(8, 64, eps=1e-05, affine=True)
+      (2): SiLU()
+      (3): Conv2d(64, 64, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1))
+      (4): GroupNorm(8, 64, eps=1e-05, affine=True)
+      (5): SiLU()
+    )
+  )
+  (cell_projection): Sequential(
+    (0): Conv2d(84, 128, kernel_size=(1, 1), stride=(1, 1))
+    (1): GroupNorm(8, 128, eps=1e-05, affine=True)
+    (2): SiLU()
+  )
+  (refinement): Sequential(
+    (0): Conv2d(128, 128, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1))
+    (1): GroupNorm(8, 128, eps=1e-05, affine=True)
+    (2): SiLU()
+    (3): Conv2d(128, 128, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1))
+    (4): GroupNorm(8, 128, eps=1e-05, affine=True)
+  )
+  (general_residual_head): Conv2d(128, 20, kernel_size=(1, 1), stride=(1, 1))
+  (auth_refinement): Sequential(
+    (0): Conv2d(128, 64, kernel_size=(1, 1), stride=(1, 1))
+    (1): GroupNorm(8, 64, eps=1e-05, affine=True)
+    (2): SiLU()
+    (3): Conv2d(64, 64, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1))
+    (4): GroupNorm(8, 64, eps=1e-05, affine=True)
+    (5): SiLU()
+    (6): Conv2d(64, 8, kernel_size=(1, 1), stride=(1, 1))
+  )
+  (confidence_head): Sequential(
+    (0): Conv2d(128, 64, kernel_size=(1, 1), stride=(1, 1))
+    (1): SiLU()
+    (2): Conv2d(64, 1, kernel_size=(1, 1), stride=(1, 1))
+  )
+)
+
+Total parameters: 437,885
+Trainable parameters: 0
+
+========================================================================================================================
+weak_symbol_head
+========================================================================================================================
+WeakSymbolResidualHead(
+  (body): Sequential(
+    (0): LayerNorm((141,), eps=1e-05, elementwise_affine=True)
+    (1): Linear(in_features=141, out_features=256, bias=True)
+    (2): GELU(approximate='none')
+    (3): Linear(in_features=256, out_features=192, bias=True)
+    (4): GELU(approximate='none')
+    (5): Linear(in_features=192, out_features=256, bias=True)
+  )
+)
+
+Total parameters: 135,386
+Trainable parameters: 0
+
+========================================================================================================================
+auth_symbol_head
+========================================================================================================================
+WeakSymbolResidualHead(
+  (body): Sequential(
+    (0): LayerNorm((141,), eps=1e-05, elementwise_affine=True)
+    (1): Linear(in_features=141, out_features=256, bias=True)
+    (2): GELU(approximate='none')
+    (3): Linear(in_features=256, out_features=192, bias=True)
+    (4): GELU(approximate='none')
+    (5): Linear(in_features=192, out_features=256, bias=True)
+  )
+)
+
+Total parameters: 135,386
+Trainable parameters: 0

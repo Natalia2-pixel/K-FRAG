@@ -1,0 +1,44 @@
+{
+  "system": "K-FRAG",
+  "version": "V4.15",
+  "canonical_image_size": 256,
+  "grid_rows": 4,
+  "grid_cols": 4,
+  "regions": 16,
+  "region_size": 64,
+  "fragment_bits": 20,
+  "fragment_layout": {
+    "logical_index_bits": 4,
+    "source_symbol_bits": 8,
+    "auth_symbol_bits": 8
+  },
+  "protocol": {
+    "V4_VERSION": 4,
+    "V4_N": 16,
+    "V4_K": 6,
+    "V4_TOKEN_BYTES": 6,
+    "V4_AUTH_BYTES": 6,
+    "V4_SOURCE_DOMAIN": "KFRAG-V4-SOURCE-TOKEN48",
+    "V4_AUTH_DOMAIN": "KFRAG-V4-AUTH-TAG48"
+  },
+  "search": {
+    "BATCH_PLACEMENTS": 24,
+    "COARSE_STRIDE": 2,
+    "TOP_COARSE": 60,
+    "REFINE_RADIUS": 10,
+    "TOP_STRICT": 20,
+    "PHASE_TOP_K": 5,
+    "PHASE_STEP": 16
+  },
+  "v415": {
+    "V415_SOURCE_POOL": 8,
+    "V415_AUTH_POOL": 8,
+    "V415_AUTH_TOP_K": 4,
+    "V415_MIN_AUTH_SUPPORT": 6
+  },
+  "final_recovery_function": "blind_v412_phase_recovery",
+  "final_decoder_function": "decode_phase_tiles_kfrag_final_100k",
+  "feature_function": "frozen_fragment_features",
+  "rescue_wrapper_in_final_method": false,
+  "post_auth_phase_refinement_in_final_method": false
+}

@@ -2,6 +2,7 @@ from .natural_channel_v2 import NaturalChannelV2
 from .regional_channel_v1 import RegionalChannelV1
 from .stage_d_12bit_transition_v1 import StageD12BitTransitionV1
 from .stage_d_tag_capacity_v1 import StageDTagCapacityV1
+from .weak_symbol_residual_head import WeakSymbolResidualHead
 
 from .v3_independent_decoder import (
     V3IndependentIndexDecoder,
@@ -31,4 +32,5 @@ __all__ = [
     "StructureAwareFragmentFusion",
     "MultiScaleRegionalEncoder",
     "KFRAGRegionalRefinerV2",
+    "WeakSymbolResidualHead",
 ]

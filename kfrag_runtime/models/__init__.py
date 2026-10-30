@@ -14,6 +14,11 @@ from .structure_aware_fragment_fusion import (
     StructureAwareFragmentFusion,
 )
 
+from .kfrag_regional_refiner_v2 import (
+    MultiScaleRegionalEncoder,
+    KFRAGRegionalRefinerV2,
+)
+
 __all__ = [
     "NaturalChannelV2",
     "RegionalChannelV1",
@@ -24,4 +29,6 @@ __all__ = [
     "V3IndependentDecoder",
     "SpatialResidualBlock",
     "StructureAwareFragmentFusion",
+    "MultiScaleRegionalEncoder",
+    "KFRAGRegionalRefinerV2",
 ]

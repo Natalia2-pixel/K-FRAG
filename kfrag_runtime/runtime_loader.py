@@ -8,6 +8,7 @@ from .models import (
     StageD12BitTransitionV1,
     StageDTagCapacityV1,
     V3IndependentDecoder,
+    StructureAwareFragmentFusion,
     KFRAGRegionalRefinerV2,
     WeakSymbolResidualHead,
 )
@@ -84,6 +85,7 @@ def _freeze(model, device):
 def load_v415_runtime(
     checkpoint_path,
     device="auto",
+    fusion_checkpoint_path=None,
 ):
     """
     Restore the frozen K-FRAG V4.15 neural runtime.
@@ -91,6 +93,7 @@ def load_v415_runtime(
     Returns a dictionary containing:
 
         v3_independent_decoder
+        fusion_model
         verification_model
         weak_symbol_head
         auth_symbol_head
@@ -106,7 +109,31 @@ def load_v415_runtime(
             f"K-FRAG checkpoint not found: {checkpoint_path}"
         )
 
+    # --------------------------------------------------------
+    # Resolve fusion checkpoint
+    # --------------------------------------------------------
+
+    if fusion_checkpoint_path is None:
+        fusion_checkpoint_path = (
+            checkpoint_path.parent
+            / "fusion_model_state_dict.pt"
+        )
+    else:
+        fusion_checkpoint_path = Path(
+            fusion_checkpoint_path
+        )
+
+    if not fusion_checkpoint_path.is_file():
+        raise FileNotFoundError(
+            "K-FRAG fusion checkpoint not found: "
+            f"{fusion_checkpoint_path}"
+        )
+
     resolved_device = _resolve_device(device)
+
+    # --------------------------------------------------------
+    # Load main frozen V4.15 bundle
+    # --------------------------------------------------------
 
     checkpoint = torch.load(
         checkpoint_path,
@@ -160,6 +187,28 @@ def load_v415_runtime(
     del v2_scaffold
 
     # --------------------------------------------------------
+    # Structure-aware fusion model
+    # --------------------------------------------------------
+
+    fusion_state = torch.load(
+        fusion_checkpoint_path,
+        map_location="cpu",
+        weights_only=True,
+    )
+
+    if not isinstance(fusion_state, dict):
+        raise TypeError(
+            "K-FRAG fusion checkpoint must contain a state dictionary."
+        )
+
+    fusion_model = StructureAwareFragmentFusion()
+
+    fusion_model.load_state_dict(
+        fusion_state,
+        strict=True,
+    )
+
+    # --------------------------------------------------------
     # Final verification/refiner model
     # --------------------------------------------------------
 
@@ -205,6 +254,11 @@ def load_v415_runtime(
         resolved_device,
     )
 
+    fusion_model = _freeze(
+        fusion_model,
+        resolved_device,
+    )
+
     verification_model = _freeze(
         verification_model,
         resolved_device,
@@ -220,11 +274,16 @@ def load_v415_runtime(
         resolved_device,
     )
 
+    # --------------------------------------------------------
+    # Final runtime bundle
+    # --------------------------------------------------------
+
     return {
         "system": checkpoint["system"],
         "format_version": checkpoint["format_version"],
         "device": resolved_device,
         "v3_independent_decoder": v3_independent_decoder,
+        "fusion_model": fusion_model,
         "verification_model": verification_model,
         "weak_symbol_head": weak_symbol_head,
         "auth_symbol_head": auth_symbol_head,

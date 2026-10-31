@@ -785,3 +785,60 @@ def blind_crop_search_spatial_fast(
         "coarse_count": len(coarse_placements),
         "refined_count": len(refine_placements),
     }
+
+def place_crop_on_canvas(
+    crop,
+    candidate_x,
+    candidate_y,
+    canonical_size=256,
+    neutral_value=0.5,
+):
+    if crop.ndim == 4:
+        if crop.shape[0] != 1:
+            raise ValueError(
+                f"Expected single crop batch, got {tuple(crop.shape)}"
+            )
+        crop3 = crop[0]
+
+    elif crop.ndim == 3:
+        crop3 = crop
+
+    else:
+        raise ValueError(
+            f"Unexpected crop shape {tuple(crop.shape)}"
+        )
+
+    channels, crop_h, crop_w = crop3.shape
+
+    x = int(candidate_x)
+    y = int(candidate_y)
+
+    if (
+        x < 0
+        or y < 0
+        or x + crop_w > canonical_size
+        or y + crop_h > canonical_size
+    ):
+        raise ValueError(
+            f"Invalid placement {(x, y)} "
+            f"for crop {(crop_h, crop_w)}"
+        )
+
+    canvas = torch.full(
+        (
+            channels,
+            canonical_size,
+            canonical_size,
+        ),
+        float(neutral_value),
+        device=crop3.device,
+        dtype=crop3.dtype,
+    )
+
+    canvas[
+        :,
+        y:y + crop_h,
+        x:x + crop_w,
+    ] = crop3
+
+    return canvas

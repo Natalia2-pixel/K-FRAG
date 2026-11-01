@@ -15,6 +15,8 @@ V4_AUTH_BYTES = 6
 
 # RS(16,6): 6 data bytes + 10 parity bytes = 16 symbols.
 V4_RS_CODEC = RSCodec(10)
+V4_SOURCE_DOMAIN = b"KFRAG-V4-SOURCE-TOKEN48"
+V4_AUTH_DOMAIN = b"KFRAG-V4-AUTH-TAG48"
 
 
 # ---------------------------------------------------------------------

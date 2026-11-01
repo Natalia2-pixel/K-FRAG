@@ -45,11 +45,15 @@ def _resolve_device(device):
 
 def _build_v2_scaffold():
     """
-    Reconstruct the V2 hierarchy required to instantiate
-    V3IndependentDecoder.
+    Reconstruct the historical K-FRAG V2 model hierarchy.
 
-    The final V4.15 checkpoint stores the complete V3 decoder state,
-    so this V2 graph is used as an architectural scaffold only.
+    This architecture serves two separate purposes:
+
+    1. A trained V2 instance is restored from
+       v2_model_audit_state_dict.pt for watermark issuance/embedding.
+
+    2. A separate V2 instance is used as the architectural parent required
+       to construct V3IndependentDecoder before loading the final V3 state.
     """
 
     stage_b = NaturalChannelV2(
@@ -82,21 +86,59 @@ def _freeze(model, device):
     return model
 
 
+def _extract_state_dict(checkpoint, name):
+    """
+    Accept either a raw state_dict or a simple checkpoint wrapper.
+    """
+
+    if not isinstance(checkpoint, dict):
+        raise TypeError(
+            f"{name} checkpoint must contain a dictionary."
+        )
+
+    if "state_dict" in checkpoint:
+        state = checkpoint["state_dict"]
+
+        if not isinstance(state, dict):
+            raise TypeError(
+                f"{name} checkpoint['state_dict'] must be a dictionary."
+            )
+
+        return state
+
+    return checkpoint
+
+
 def load_v415_runtime(
     checkpoint_path,
     device="auto",
     fusion_checkpoint_path=None,
+    v2_checkpoint_path=None,
 ):
     """
-    Restore the frozen K-FRAG V4.15 neural runtime.
+    Restore the frozen K-FRAG V4.15 runtime.
 
-    Returns a dictionary containing:
+    The returned runtime contains:
+
+        v2_model_audit
+            Trained historical V2 watermark encoder used for
+            issuance/embedding.
 
         v3_independent_decoder
+            Final V3 decoder restored from the V4.15 checkpoint.
+
         fusion_model
+            Structure-aware fragment fusion model.
+
         verification_model
+            Final regional/refinement model.
+
         weak_symbol_head
+            Source-byte residual head.
+
         auth_symbol_head
+            Authentication-byte residual head.
+
         device
         system
         format_version
@@ -109,8 +151,10 @@ def load_v415_runtime(
             f"K-FRAG checkpoint not found: {checkpoint_path}"
         )
 
+    resolved_device = _resolve_device(device)
+
     # --------------------------------------------------------
-    # Resolve fusion checkpoint
+    # Resolve auxiliary checkpoint paths
     # --------------------------------------------------------
 
     if fusion_checkpoint_path is None:
@@ -129,7 +173,21 @@ def load_v415_runtime(
             f"{fusion_checkpoint_path}"
         )
 
-    resolved_device = _resolve_device(device)
+    if v2_checkpoint_path is None:
+        v2_checkpoint_path = (
+            checkpoint_path.parent
+            / "v2_model_audit_state_dict.pt"
+        )
+    else:
+        v2_checkpoint_path = Path(
+            v2_checkpoint_path
+        )
+
+    if not v2_checkpoint_path.is_file():
+        raise FileNotFoundError(
+            "K-FRAG V2 encoder checkpoint not found: "
+            f"{v2_checkpoint_path}"
+        )
 
     # --------------------------------------------------------
     # Load main frozen V4.15 bundle
@@ -169,7 +227,34 @@ def load_v415_runtime(
         )
 
     # --------------------------------------------------------
-    # V3 independent decoder
+    # Restore trained historical V2 watermark encoder
+    # --------------------------------------------------------
+
+    v2_state_raw = torch.load(
+        v2_checkpoint_path,
+        map_location="cpu",
+        weights_only=False,
+    )
+
+    v2_state = _extract_state_dict(
+        v2_state_raw,
+        "K-FRAG V2 encoder",
+    )
+
+    v2_model_audit = _build_v2_scaffold()
+
+    v2_model_audit.load_state_dict(
+        v2_state,
+        strict=True,
+    )
+
+    v2_model_audit = _freeze(
+        v2_model_audit,
+        resolved_device,
+    )
+
+    # --------------------------------------------------------
+    # Construct V3 decoder using a separate V2 scaffold
     # --------------------------------------------------------
 
     v2_scaffold = _build_v2_scaffold()
@@ -183,23 +268,28 @@ def load_v415_runtime(
         strict=True,
     )
 
-    # V2 is no longer needed after V3 construction/loading.
-    del v2_scaffold
+    v3_independent_decoder = _freeze(
+        v3_independent_decoder,
+        resolved_device,
+    )
+
+    # Do not use v2_scaffold for embedding.
+    # It belongs only to the reconstructed V3 decoder hierarchy.
 
     # --------------------------------------------------------
     # Structure-aware fusion model
     # --------------------------------------------------------
 
-    fusion_state = torch.load(
+    fusion_state_raw = torch.load(
         fusion_checkpoint_path,
         map_location="cpu",
         weights_only=True,
     )
 
-    if not isinstance(fusion_state, dict):
-        raise TypeError(
-            "K-FRAG fusion checkpoint must contain a state dictionary."
-        )
+    fusion_state = _extract_state_dict(
+        fusion_state_raw,
+        "K-FRAG fusion",
+    )
 
     fusion_model = StructureAwareFragmentFusion()
 
@@ -208,8 +298,13 @@ def load_v415_runtime(
         strict=True,
     )
 
+    fusion_model = _freeze(
+        fusion_model,
+        resolved_device,
+    )
+
     # --------------------------------------------------------
-    # Final verification/refiner model
+    # Final verification / regional refinement model
     # --------------------------------------------------------
 
     verification_model = KFRAGRegionalRefinerV2(
@@ -223,8 +318,13 @@ def load_v415_runtime(
         strict=True,
     )
 
+    verification_model = _freeze(
+        verification_model,
+        resolved_device,
+    )
+
     # --------------------------------------------------------
-    # Final weak-symbol head
+    # Weak-symbol source-byte head
     # --------------------------------------------------------
 
     weak_symbol_head = WeakSymbolResidualHead()
@@ -234,8 +334,13 @@ def load_v415_runtime(
         strict=True,
     )
 
+    weak_symbol_head = _freeze(
+        weak_symbol_head,
+        resolved_device,
+    )
+
     # --------------------------------------------------------
-    # Final authentication-symbol head
+    # Authentication-symbol byte head
     # --------------------------------------------------------
 
     auth_symbol_head = WeakSymbolResidualHead()
@@ -243,30 +348,6 @@ def load_v415_runtime(
     auth_symbol_head.load_state_dict(
         checkpoint["auth_symbol_head"],
         strict=True,
-    )
-
-    # --------------------------------------------------------
-    # Freeze final runtime
-    # --------------------------------------------------------
-
-    v3_independent_decoder = _freeze(
-        v3_independent_decoder,
-        resolved_device,
-    )
-
-    fusion_model = _freeze(
-        fusion_model,
-        resolved_device,
-    )
-
-    verification_model = _freeze(
-        verification_model,
-        resolved_device,
-    )
-
-    weak_symbol_head = _freeze(
-        weak_symbol_head,
-        resolved_device,
     )
 
     auth_symbol_head = _freeze(
@@ -282,6 +363,7 @@ def load_v415_runtime(
         "system": checkpoint["system"],
         "format_version": checkpoint["format_version"],
         "device": resolved_device,
+        "v2_model_audit": v2_model_audit,
         "v3_independent_decoder": v3_independent_decoder,
         "fusion_model": fusion_model,
         "verification_model": verification_model,

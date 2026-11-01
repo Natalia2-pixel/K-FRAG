@@ -24,3 +24,9 @@ __pycache__/
 outputs/
 results_private/
 wandb/
+
+# Local K-FRAG diagnostic files
+test_auth_topk.py
+test_kfrag_positive_roundtrip.py
+test_source_rs.py
+test_images/

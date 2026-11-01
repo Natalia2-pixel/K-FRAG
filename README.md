@@ -1,60 +1,125 @@
-# K-FRAG V4.15
+## Public Runtime Regression Test
 
-Frozen reproducible public release of K-FRAG V4.15.
+K-FRAG includes a public regression test that checks whether the restored V4.15 runtime can be loaded and used for watermark issuance and embedding without requiring access to the private research authentication key.
 
-## Protocol
+From the repository root, run:
 
-- 256x256 canonical image
-- 4x4 regional grid
-- 16 regions
-- 64x64 region size
-- 20-bit regional fragment
-  - 4-bit logical region index
-  - 8-bit source RS symbol
-  - 8-bit authentication RS symbol
-- RS(16,6)
-- 6-byte source token
-- 6-byte authentication tag
+```bash
+python tests/test_public_runtime.py
+```
 
-## Frozen recovery
+A successful installation should end with:
 
-Final recovery:
+```text
+PUBLIC REGRESSION TEST: PASS
+```
 
-    blind_v412_phase_recovery
+The test verifies that:
 
-Frozen search:
+- the K-FRAG V4.15 runtime loads successfully,
+- the trained V2 watermark encoder checkpoint is restored,
+- the V4 issuance protocol produces 16 authenticated fragments,
+- the fragment representation has shape `(16, 20)`,
+- the watermark embedding path returns a `256 × 256` RGB image.
 
-    BATCH_PLACEMENTS = 24
-    COARSE_STRIDE = 2
-    TOP_COARSE = 60
-    REFINE_RADIUS = 10
-    TOP_STRICT = 20
+The regression test uses a deterministic public test key only for software validation. It is not the private authentication key used in the original research experiments.
 
-    PHASE_TOP_K = 5
-    PHASE_STEP = 16
+## Authentication Keys
 
-    V415_SOURCE_POOL = 8
-    V415_AUTH_POOL = 8
-    V415_AUTH_TOP_K = 4
-    V415_MIN_AUTH_SUPPORT = 6
+K-FRAG uses a 32-byte authentication key for authenticated watermark issuance and verification.
 
-The unresolved rescue wrapper and post-authentication phase refinement
-are not part of the final method.
+Authentication keys are intentionally **not stored in this repository**.
 
-## Security
+Applications should provide their key externally at runtime:
 
-The private HMAC key is not included in this repository.
+```python
+from kfrag_runtime.runtime_loader import load_v415_runtime
+from kfrag_runtime.embedding import embed_full_spatial_image_v4
 
-The verifier must provision the key separately.
+runtime = load_v415_runtime(
+    "checkpoints/KFRAG_V415_FINAL_MODELS.pt"
+)
 
-Never commit:
+auth_key = YOUR_32_BYTE_SECRET_KEY
 
-    PRIVATE_v3_hmac_key.pt
-    V3H_TRAIN_KEY raw bytes
-    secret environment files
+result = embed_full_spatial_image_v4(
+    clean_image=image_tensor,
+    source_id=b"example-source-id",
+    runtime=runtime,
+    auth_key=auth_key,
+)
 
-## Reproducibility
+watermarked_image = result["watermarked"]
+```
 
-The exact frozen runtime snapshot and model state dictionaries are included.
+The key must be exactly 32 bytes:
 
-Dataset image data is not included. Split manifests contain portable image IDs.
+```python
+assert isinstance(auth_key, bytes)
+assert len(auth_key) == 32
+```
+
+For security, do not:
+
+- hard-code production authentication keys in source files,
+- commit authentication keys to Git,
+- include private keys in checkpoints,
+- include private-key paths or values in public tests or examples.
+
+A deployment may instead load the authentication key from an environment variable, secret manager, protected configuration file, or another external secret-storage mechanism.
+
+## Core Runtime Files
+
+The restored V4.15 public runtime uses the following checkpoint files:
+
+```text
+checkpoints/
+├── KFRAG_V415_FINAL_MODELS.pt
+├── fusion_model_state_dict.pt
+└── v2_model_audit_state_dict.pt
+```
+
+The principal runtime modules are:
+
+```text
+kfrag_runtime/
+├── runtime_loader.py
+├── runtime_ops.py
+├── protocol_v4.py
+├── embedding.py
+├── recovery.py
+└── verify.py
+```
+
+`runtime_loader.py` restores the trained neural components required by the V4.15 pipeline.
+
+`embedding.py` implements authenticated V4 issuance and watermark embedding.
+
+`recovery.py` implements fragment recovery and authenticated token reconstruction.
+
+`verify.py` provides the higher-level crop verification interface.
+
+## Minimal Runtime Check
+
+A minimal runtime-loading check can be performed with:
+
+```python
+from kfrag_runtime.runtime_loader import load_v415_runtime
+
+runtime = load_v415_runtime(
+    "checkpoints/KFRAG_V415_FINAL_MODELS.pt"
+)
+
+print(runtime["system"])
+print(runtime["device"])
+print(type(runtime["v2_model_audit"]).__name__)
+```
+
+Expected output includes:
+
+```text
+K-FRAG V4.15
+StageDTagCapacityV1
+```
+
+The exact device may be `cpu` or `cuda` depending on the available hardware.

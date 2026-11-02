@@ -1,3 +1,13 @@
+"""
+Slow integration evaluation.
+
+Runs full blind synchronization across multiple crop sizes.
+Expected to be significantly faster on CUDA than CPU.
+
+This script is intended for manual reproducibility evaluation,
+not routine unit-test execution.
+"""
+
 from pathlib import Path
 import sys
 

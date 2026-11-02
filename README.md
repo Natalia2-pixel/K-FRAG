@@ -337,7 +337,7 @@ Across the DIV2K evaluation, no wrong authenticated recoveries were observed. Re
 
 | Retained Area | Correct Authenticated | Wrong | Unresolved | Exact XY | Mean Time (s) |
 |---:|---:|---:|---:|---:|---:|
-| 25% | 96/100 (96.0%) | 0 | 4 | 82/100 (82.0%) | — |
+| 25% | 96/100 (96.0%) | 0 | 4 | 82/100 (82.0%) | 49.58 |
 | 30% | 98/100 (98.0%) | 0 | 2 | 75/100 (75.0%) | 41.23 |
 | 40% | 100/100 (100.0%) | 0 | 0 | 77/100 (77.0%) | 30.03 |
 | 50% | 100/100 (100.0%) | 0 | 0 | 85/100 (85.0%) | 19.20 |

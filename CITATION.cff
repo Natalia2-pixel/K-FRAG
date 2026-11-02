@@ -1,0 +1,43 @@
+cff-version: 1.2.0
+message: "If you use K-FRAG in your research, please cite this software and the associated paper when available."
+
+title: "K-FRAG V4.15: Fragment-Based Authenticated Image Watermarking with Blind Crop Recovery"
+
+type: software
+
+version: "4.15"
+
+date-released: "2026-11-02"
+
+authors:
+  - family-names: "NICHOLAS"
+    given-names: "NATALIA"
+
+repository-code: "https://github.com/Natalia2-pixel/K-FRAG"
+
+url: "https://github.com/Natalia2-pixel/K-FRAG"
+
+license: "Apache-2.0"
+
+keywords:
+  - watermarking
+  - image watermarking
+  - robust watermarking
+  - authenticated watermarking
+  - provenance
+  - image authentication
+  - crop robustness
+  - blind synchronization
+  - Reed-Solomon
+  - HMAC
+  - computer vision
+  - deep learning
+
+abstract: >
+  K-FRAG V4.15 is a fragment-based authenticated image-watermarking
+  system designed for robust provenance recovery from full images and
+  cropped image fragments. The released runtime includes authenticated
+  watermark issuance and embedding, independent fragment decoding,
+  structure-aware fusion, regional refinement, Reed-Solomon recovery,
+  cryptographic authentication, blind spatial synchronization, and
+  authenticated crop recovery.

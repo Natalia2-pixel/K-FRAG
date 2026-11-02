@@ -39,6 +39,27 @@ The public release does **not** include the private authentication key used in t
 
 ---
 
+## Installation
+
+For the minimal K-FRAG runtime dependencies:
+
+```bash
+pip install -r requirements.txt
+```
+
+The original frozen experimental environment is preserved under:
+
+```text
+environment/requirements_frozen.txt
+environment/environment.json
+```
+
+The frozen environment used Python 3.12.13, PyTorch 2.10.0+cu128, CUDA 12.8, and a Tesla T4 GPU.
+
+For CPU-only installation, install the appropriate CPU build of PyTorch and torchvision for your platform, then install the remaining packages from `requirements.txt`.
+
+---
+
 ## Repository Structure
 
 ```text

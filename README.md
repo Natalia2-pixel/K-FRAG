@@ -345,6 +345,23 @@ This test exercises blind spatial synchronization and authenticated recovery fro
 Authentication success and spatial-placement accuracy are reported separately.
 
 ---
+## Qualitative Blind Crop Recovery
+
+The figure below illustrates representative K-FRAG V4.15 blind-crop verification outcomes at different retained-image-area levels.
+
+![K-FRAG V4.15 qualitative blind crop recovery](docs/figures/kfrag_blind_qualitative.png)
+
+The visualization shows the complete verification process:
+
+**Original → Watermarked → Blind Crop → Recovered Placement → Authenticated Evidence → Decision**
+
+The examples illustrate three possible outcomes:
+
+- **75% retained:** the source is correctly authenticated, all 16 regional fragments provide authenticated evidence, and the crop placement is recovered exactly.
+- **50% retained:** the source is correctly authenticated from partial regional evidence and the crop placement is recovered exactly.
+- **25% retained:** the example remains unresolved, no authenticated source is returned, and no placement is reported.
+
+K-FRAG distinguishes **source authentication** from **spatial synchronization**. A source may be authenticated even when the recovered placement is not the exact ground-truth crop origin; therefore, authenticated recovery and exact-XY localization are evaluated separately.
 
 ## Retained-Area Evaluation Results
 

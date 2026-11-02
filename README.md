@@ -41,22 +41,47 @@ The public release does **not** include the private authentication key used in t
 
 ## Installation
 
-For the minimal K-FRAG runtime dependencies:
+K-FRAG requires Python 3.12 and PyTorch.
+
+### NVIDIA GPU / CUDA 12.8
+
+Install the CUDA 12.8 PyTorch build first:
 
 ```bash
-pip install -r requirements.txt
+python -m pip install torch==2.10.0 torchvision==0.25.0 --index-url https://download.pytorch.org/whl/cu128
 ```
 
-The original frozen experimental environment is preserved under:
+Then install the remaining K-FRAG runtime dependencies:
+
+```bash
+python -m pip install -r requirements.txt
+```
+
+### CPU Installation
+
+For CPU-only execution:
+
+```bash
+python -m pip install torch==2.10.0 torchvision==0.25.0
+python -m pip install -r requirements.txt
+```
+
+The original experimental environment is preserved under:
 
 ```text
 environment/requirements_frozen.txt
 environment/environment.json
 ```
 
-The frozen environment used Python 3.12.13, PyTorch 2.10.0+cu128, CUDA 12.8, and a Tesla T4 GPU.
+The frozen experimental environment used:
 
-For CPU-only installation, install the appropriate CPU build of PyTorch and torchvision for your platform, then install the remaining packages from `requirements.txt`.
+- Python 3.12.13
+- PyTorch 2.10.0+cu128
+- torchvision 0.25.0+cu128
+- CUDA 12.8
+- NVIDIA Tesla T4
+
+The full frozen dependency snapshot is retained for reproducibility, while the top-level `requirements.txt` contains only the minimal non-PyTorch runtime dependencies.
 
 ---
 

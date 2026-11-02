@@ -300,29 +300,74 @@ Authentication success and spatial-placement accuracy are reported separately.
 
 ---
 
-## Retained-Area Evaluation
+## Retained-Area Evaluation Results
 
-The slower integration evaluation can be run with:
+K-FRAG V4.15 was evaluated under controlled retained-area cropping on both DIV2K and COCO images.
 
-```bash
-python tests/test_public_retained_areas.py
+The retained-area conditions were:
+
+```text
+25%, 30%, 40%, 50%, 60%, 75%, 80%, 95%
 ```
 
-The public deterministic evaluation currently tests:
+For each condition, the evaluation records:
 
-| Crop Size | Linear Retention | Retained Area |
-|---|---:|---:|
-| 256 × 256 | 100.00% | 100.00% |
-| 240 × 240 | 93.75% | 87.89% |
-| 224 × 224 | 87.50% | 76.56% |
-| 208 × 208 | 81.25% | 66.02% |
-| 192 × 192 | 75.00% | 56.25% |
-| 176 × 176 | 68.75% | 47.27% |
-| 160 × 160 | 62.50% | 39.06% |
+- correct authenticated recovery,
+- wrong authenticated recovery,
+- unresolved cases,
+- exact spatial recovery,
+- mean recovery time.
 
-For the deterministic public regression carrier, authenticated token recovery succeeded for all of the above tested crop sizes.
+### DIV2K
 
-These values are provided as **software reproducibility checks** and should not be interpreted as replacements for large-scale experimental results on the research evaluation dataset.
+| Retained Area | Correct Authenticated | Wrong | Unresolved | Exact XY | Mean Time (s) |
+|---:|---:|---:|---:|---:|---:|
+| 25% | 83/100 (83.0%) | 0 | 17 | 67/100 (67.0%) | 47.54 |
+| 30% | 99/100 (99.0%) | 0 | 1 | 80/100 (80.0%) | 41.50 |
+| 40% | 100/100 (100.0%) | 0 | 0 | 82/100 (82.0%) | 29.92 |
+| 50% | 100/100 (100.0%) | 0 | 0 | 83/100 (83.0%) | 20.02 |
+| 60% | 100/100 (100.0%) | 0 | 0 | 90/100 (90.0%) | 9.72 |
+| 75% | 100/100 (100.0%) | 0 | 0 | 95/100 (95.0%) | 2.37 |
+| 80% | 100/100 (100.0%) | 0 | 0 | 95/100 (95.0%) | 1.65 |
+| 95% | 100/100 (100.0%) | 0 | 0 | 97/100 (97.0%) | 0.52 |
+
+Across the DIV2K evaluation, no wrong authenticated recoveries were observed. Recovery reached 100% from 40% retained area onward, while exact spatial synchronization improved as the retained area increased.
+
+### COCO
+
+| Retained Area | Correct Authenticated | Wrong | Unresolved | Exact XY | Mean Time (s) |
+|---:|---:|---:|---:|---:|---:|
+| 25% | 96/100 (96.0%) | 0 | 4 | 82/100 (82.0%) | — |
+| 30% | 98/100 (98.0%) | 0 | 2 | 75/100 (75.0%) | 41.23 |
+| 40% | 100/100 (100.0%) | 0 | 0 | 77/100 (77.0%) | 30.03 |
+| 50% | 100/100 (100.0%) | 0 | 0 | 85/100 (85.0%) | 19.20 |
+| 60% | 100/100 (100.0%) | 0 | 0 | 92/100 (92.0%) | 9.75 |
+| 75% | 100/100 (100.0%) | 0 | 0 | 94/100 (94.0%) | 2.52 |
+| 80% | 100/100 (100.0%) | 0 | 0 | 90/100 (90.0%) | 1.58 |
+| 95% | 100/100 (100.0%) | 0 | 0 | 95/100 (95.0%) | 0.50 |
+
+For the COCO 25% retained-area condition, the final unresolved-only ±16 rescue evaluation produced:
+
+```text
+Images evaluated                  : 100
+Correct authenticated             : 96/100 (96.00%)
+Wrong authenticated               : 0/100 (0.00%)
+Ambiguous                         : 0/100 (0.00%)
+Unresolved                        : 4/100 (4.00%)
+Accepted total                    : 96/100 (96.00%)
+Exact XY                          : 82/100 (82.00%)
+Correct authenticated + exact XY  : 82/100 (82.00%)
+```
+
+No wrong authenticated recoveries were observed in the reported COCO retained-area evaluations. Correct authenticated recovery reached 100% from 40% retained area onward.
+
+### Interpretation
+
+Authentication success and exact spatial synchronization are reported separately.
+
+A recovery may authenticate the correct provenance token even when the highest-ranked spatial placement is not the exact ground-truth crop origin. For this reason, K-FRAG reports both authenticated recovery accuracy and exact-XY synchronization accuracy.
+
+The retained-area results above correspond to the research evaluation protocol and are distinct from the smaller deterministic regression tests provided under `tests/`.
 
 ---
 

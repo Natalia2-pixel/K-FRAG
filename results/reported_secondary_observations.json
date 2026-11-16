@@ -1,0 +1,38 @@
+{
+  "record_type": "historical_manuscript_summary_not_reproduced",
+  "fidelity_div2k_256": {
+    "images": 100,
+    "psnr_db": 39.0,
+    "ssim": 0.965,
+    "lpips": 0.002609
+  },
+  "negative_control_25pct_separate_protocol": {
+    "genuine_accepted": 89,
+    "genuine_trials": 100,
+    "unwatermarked_rejected": 100,
+    "unwatermarked_trials": 100,
+    "incorrect_reference_matches": 0,
+    "incorrect_reference_trials": 100,
+    "incorrect_reference_is_post_verification_comparison": true,
+    "expected_identity_supplied_to_verifier": false
+  },
+  "known_alignment_distortions_div2k_100": {
+    "JPEG_Q95_correct_verification_percent": 98,
+    "JPEG_Q90_correct_verification_percent": 37,
+    "Gaussian_noise_three_levels_correct_verification_percent": [
+      100,
+      100,
+      100
+    ]
+  },
+  "regional_bit_accuracy_div2k": {
+    "min_full20_percent": 89.75,
+    "max_full20_percent": 90.51,
+    "require_cell_visibility_at_least": 0.95
+  },
+  "coco_25pct_rescue_assisted_separate": {
+    "correct_source_verification": 96,
+    "trials": 100,
+    "rescue_wrapper_in_final_method": false
+  }
+}

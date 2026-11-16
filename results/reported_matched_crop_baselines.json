@@ -1,0 +1,60 @@
+{
+  "record_type": "reported_matched_crop_baseline_aggregates_not_recomputed",
+  "source": "Current author-provided manuscript; raw 800-row CSVs not present in uploaded ZIP",
+  "images": "100 DIV2K validation images",
+  "crop_records_per_method": 800,
+  "geometry_match_status": "Reported as matched against regenerated K-FRAG manifest; raw manifest and CSVs not supplied in this ZIP",
+  "same_success_criterion": false,
+  "methods": {
+    "K-FRAG": {
+      "criterion": "correct keyed-source-token verification",
+      "payload": "48-bit source token; 20-bit regional packets",
+      "success_percent": [
+        83,
+        99,
+        100,
+        100,
+        100,
+        100,
+        100,
+        100
+      ]
+    },
+    "WAM": {
+      "criterion": "exact 32-bit message recovery",
+      "success_percent": [
+        94,
+        97,
+        98,
+        96,
+        99,
+        94,
+        97,
+        91
+      ]
+    },
+    "InvisMark": {
+      "criterion": "exact 100-bit message recovery",
+      "success_percent": [
+        0,
+        0,
+        22,
+        72,
+        85,
+        94,
+        94,
+        96
+      ]
+    }
+  },
+  "nominal_retained_area_percent": [
+    25,
+    30,
+    40,
+    50,
+    60,
+    75,
+    80,
+    95
+  ]
+}

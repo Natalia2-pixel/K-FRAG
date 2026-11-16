@@ -25,9 +25,19 @@ python tests/test_public_retained_areas.py
 
 `test_release_contract.py` checks checkpoint hashes and core protocol/configuration invariants; it does **not** execute the model. The other tests run deterministic synthetic carriers using a **public, non-secret** test key. Passing them does not validate the manuscript's DIV2K benchmark, negative controls, or matched baseline experiment. The retained-area script uses **centered square crops** with actual areas different from the manuscript's eight nominal crop settings.
 
-## Historical DIV2K benchmark (not reproduced here)
+## Historical DIV2K benchmark
 
 100 validation images (0801--0900), 8 nominal retained-area settings = 800 blind crop trials. Reported correct source-verification counts: 83/100 at 25%, 99/100 at 30%, and 100/100 at 40%, 50%, 60%, 75%, 80%, and 95%. No incorrect-source acceptance was reported for those 800 trials. Exact crop origin need not be recovered for source verification to succeed. See `results/historical_div2k_blind_crop_aggregates.json` for the reported summary and its provenance caveats.
+
+**Historical DIV2K Per-Image Evaluation Records**
+
+`results/kfrag_v415_div2k_historical_per_image_results.csv` contains the original K-FRAG V4.15 blind-cropping evaluation outcomes for 100 DIV2K validation images (0801–0900) across eight nominal retained-area settings, totaling 800 trials.
+
+The records were extracted from the archived experimental console logs, with exact duplicate entries removed and aggregate authentication and localization counts verified against the original results.
+
+Each entry records the image identifier, nominal retained area, authentication outcome, exact crop-origin recovery status, and logged verification runtime. Runtimes retain the precision of the historical console output.
+
+These are archived experimental results, not newly executed inference results.
 
 ## Matched-geometry baseline comparison (historical)
 

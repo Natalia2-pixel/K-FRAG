@@ -2,6 +2,12 @@
 # ====================================================================================================================
 # decode_phase_tiles_kfrag_final_100k
 # ====================================================================================================================
+import torch
+import numpy as np
+from kfrag_runtime.recovery import recover_v410_at_placement
+from kfrag_runtime.historical_candidate_normalization import (
+    normalize_blind_candidates,
+)
 @torch.no_grad()
 def decode_phase_tiles_kfrag_final_100k(tiles):
 

@@ -1,0 +1,37 @@
+{
+  "experiment": "KFRAG_V415_DIV2K",
+  "timestamp_utc": "2026-11-19T20:22:58.855729+00:00",
+  "image": "0801.png",
+  "retained_area_pct": 80,
+  "original_image_size": [
+    2040,
+    1356
+  ],
+  "canonical_size": [
+    256,
+    256
+  ],
+  "crop_x": 24,
+  "crop_y": 0,
+  "crop_width": 181,
+  "crop_height": 256,
+  "authentication_outcome": "correct_authenticated",
+  "accepted": true,
+  "ambiguous": false,
+  "token_matches": true,
+  "true_xy": [
+    24,
+    0
+  ],
+  "recovered_xy": [
+    24,
+    0
+  ],
+  "exact_xy": true,
+  "tested_placements": 7,
+  "recovery_runtime_seconds": 11.227,
+  "device": "cpu",
+  "evaluation_key_type": "public_deterministic_test_key",
+  "historical_private_key_used": false,
+  "source_id_algorithm": "KFRAG_EVAL_V1_SHA256_TRUNC8_RECONSTRUCTED"
+}

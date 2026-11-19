@@ -1,4 +1,11 @@
 image,retained_area_pct,authentication_outcome,accepted,ambiguous,token_matches,true_x,true_y,recovered_x,recovered_y,exact_xy,tested_placements,recovery_runtime_seconds,device,evaluation_key_type,source_id_algorithm,timestamp_utc
+0801.png,25,correct_authenticated,True,False,True,87,77,87,77,True,19,2155.601,cpu,public_deterministic_test_key,KFRAG_EVAL_V1_SHA256_TRUNC8_RECONSTRUCTED,2026-11-19T19:45:14.185967+00:00
+0801.png,30,correct_authenticated,True,False,True,75,84,75,84,True,19,968.302,cpu,public_deterministic_test_key,KFRAG_EVAL_V1_SHA256_TRUNC8_RECONSTRUCTED,2026-11-19T20:01:27.330189+00:00
+0801.png,40,correct_authenticated,True,False,True,13,47,13,47,True,18,529.935,cpu,public_deterministic_test_key,KFRAG_EVAL_V1_SHA256_TRUNC8_RECONSTRUCTED,2026-11-19T20:10:21.174845+00:00
+0801.png,50,correct_authenticated,True,False,True,19,58,3,58,False,15,514.044,cpu,public_deterministic_test_key,KFRAG_EVAL_V1_SHA256_TRUNC8_RECONSTRUCTED,2026-11-19T20:18:59.169989+00:00
+0801.png,60,correct_authenticated,True,False,True,0,76,0,76,True,8,204.476,cpu,public_deterministic_test_key,KFRAG_EVAL_V1_SHA256_TRUNC8_RECONSTRUCTED,2026-11-19T20:22:27.466558+00:00
+0801.png,75,correct_authenticated,True,False,True,0,69,0,69,True,10,12.494,cpu,public_deterministic_test_key,KFRAG_EVAL_V1_SHA256_TRUNC8_RECONSTRUCTED,2026-11-19T20:22:43.844224+00:00
+0801.png,80,correct_authenticated,True,False,True,24,0,24,0,True,7,11.227,cpu,public_deterministic_test_key,KFRAG_EVAL_V1_SHA256_TRUNC8_RECONSTRUCTED,2026-11-19T20:22:58.855729+00:00
 0801.png,95,correct_authenticated,True,False,True,10,0,10,0,True,8,3.479,cpu,public_deterministic_test_key,KFRAG_EVAL_V1_SHA256_TRUNC8_RECONSTRUCTED,2026-11-19T12:28:44.772564+00:00
 0802.png,95,correct_authenticated,True,False,True,0,6,0,6,True,6,6.573,cpu,public_deterministic_test_key,KFRAG_EVAL_V1_SHA256_TRUNC8_RECONSTRUCTED,2026-11-19T18:22:17.258765+00:00
 0803.png,95,correct_authenticated,True,False,True,23,0,23,0,True,5,6.509,cpu,public_deterministic_test_key,KFRAG_EVAL_V1_SHA256_TRUNC8_RECONSTRUCTED,2026-11-19T18:22:31.954963+00:00

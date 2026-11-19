@@ -1,0 +1,5 @@
+image,retained_area_pct,authentication_outcome,accepted,ambiguous,token_matches,true_x,true_y,recovered_x,recovered_y,exact_xy,tested_placements,recovery_runtime_seconds,device,evaluation_key_type,source_id_algorithm,timestamp_utc
+0801.png,95,correct_authenticated,True,False,True,10,0,10,0,True,8,3.479,cpu,public_deterministic_test_key,KFRAG_EVAL_V1_SHA256_TRUNC8_RECONSTRUCTED,2026-11-19T12:28:44.772564+00:00
+0802.png,95,correct_authenticated,True,False,True,0,6,0,6,True,6,6.573,cpu,public_deterministic_test_key,KFRAG_EVAL_V1_SHA256_TRUNC8_RECONSTRUCTED,2026-11-19T18:22:17.258765+00:00
+0803.png,95,correct_authenticated,True,False,True,23,0,23,0,True,5,6.509,cpu,public_deterministic_test_key,KFRAG_EVAL_V1_SHA256_TRUNC8_RECONSTRUCTED,2026-11-19T18:22:31.954963+00:00
+0804.png,95,correct_authenticated,True,False,True,17,0,17,0,True,7,7.191,cpu,public_deterministic_test_key,KFRAG_EVAL_V1_SHA256_TRUNC8_RECONSTRUCTED,2026-11-19T18:22:45.785965+00:00

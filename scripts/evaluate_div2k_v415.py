@@ -13,7 +13,8 @@ import csv
 import time
 from pathlib import Path
 import hashlib
-
+import json
+from datetime import datetime, timezone
 import numpy as np
 import torch
 from PIL import Image
@@ -49,7 +50,11 @@ def main():
     parser.add_argument("--image", default="0801.png")
     parser.add_argument("--area", type=int, default=25)
     parser.add_argument("--device", default="auto")
-
+    parser.add_argument(
+        "--output",
+        default=None,
+        help="Optional path for saving evaluation results as JSON.",
+    )
     args = parser.parse_args()
 
     image_path = ROOT / "data" / "DIV2K_valid_HR" / args.image
@@ -206,6 +211,67 @@ def main():
     print("Tested placements:", result.get("tested_placements"))
     print("Recovery runtime (seconds):", round(elapsed, 3))
     print("=" * 72)
+
+    # ------------------------------------------------------------
+    # SAVE STRUCTURED EVALUATION RESULT
+    # ------------------------------------------------------------
+
+    if args.output:
+        output_path = Path(args.output)
+        output_path.parent.mkdir(
+            parents=True,
+            exist_ok=True,
+        )
+
+        evaluation_record = {
+            "experiment": "KFRAG_V415_DIV2K",
+            "timestamp_utc": datetime.now(
+                timezone.utc
+            ).isoformat(),
+            "image": args.image,
+            "retained_area_pct": args.area,
+            "original_image_size": list(original_size),
+            "canonical_size": [256, 256],
+            "crop_x": x,
+            "crop_y": y,
+            "crop_width": w,
+            "crop_height": h,
+            "authentication_outcome": status,
+            "accepted": accepted,
+            "ambiguous": ambiguous,
+            "token_matches": bool(token_matches),
+            "true_xy": [x, y],
+            "recovered_xy": (
+                list(recovered_xy)
+                if recovered_xy is not None
+                else None
+            ),
+            "exact_xy": bool(exact_xy),
+            "tested_placements": result.get(
+                "tested_placements"
+            ),
+            "recovery_runtime_seconds": round(
+                elapsed, 3
+            ),
+            "device": str(runtime["device"]),
+            "evaluation_key_type": "public_deterministic_test_key",
+            "historical_private_key_used": False,
+            "source_id_algorithm": (
+                "KFRAG_EVAL_V1_SHA256_TRUNC8_RECONSTRUCTED"
+            ),
+        }
+
+        with output_path.open(
+            "w", encoding="utf-8"
+        ) as file:
+            json.dump(
+                evaluation_record,
+                file,
+                indent=2,
+            )
+
+        print("\nEvaluation result saved to:", output_path)
+
 
 
 if __name__ == "__main__":

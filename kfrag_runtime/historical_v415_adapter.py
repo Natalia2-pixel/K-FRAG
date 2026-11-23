@@ -12,7 +12,8 @@ concurrent recovery operations.
 from threading import RLock
 from kfrag_runtime import runtime_ops as ops
 from kfrag_runtime import frozen_runtime_functions as frozen
-from kfrag_runtime.recovery import recover_v410_at_placement
+"from kfrag_runtime.recovery import recover_v410_at_placement"
+from kfrag_runtime.recovery import recover_v415_at_placement
 
 
 _HISTORICAL_LOCK = RLock()
@@ -52,12 +53,13 @@ def recover_historical_v415(
     search_function = frozen.blind_crop_search_spatial_fast
     search_globals = search_function.__globals__
 
+    
     def authenticated_placement(
         crop,
         candidate_x,
         candidate_y,
     ):
-        return recover_v410_at_placement(
+        return recover_v415_at_placement(
             crop=crop,
             candidate_x=candidate_x,
             candidate_y=candidate_y,
@@ -65,6 +67,7 @@ def recover_historical_v415(
             auth_key=auth_key,
             auth_domain=auth_domain,
         )
+
 
     def historical_batch_canvases(
         crop,

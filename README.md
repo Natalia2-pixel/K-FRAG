@@ -96,10 +96,16 @@ Green/highlighted cells represent **reconstruction-support positions**, not inde
 - `docs/` -- architecture and scope, evidence inventory, and supplementary code instructions.
 - `splits/` -- COCO subset identifier lists; not independent evidence of training isolation from earlier development.
 
+
 ## Security and anonymous submission
 
-Generate your own 32-byte key. The historical private authentication key is absent; `bytes(range(32))` is public. PyTorch's checkpoint loading must only be used with trusted weights; see [SECURITY.md](SECURITY.md).
+The original private authentication key is not included in this release. Users must generate and securely manage their own 32-byte authentication key.
 
-The public repository includes identifying citation information; **do not link to it from a double-blind CVPR submission**. Use a checked anonymous supplementary-code ZIP uploaded through the conference submission system. CVPR 2027 disallows external links that expand the contribution. See `docs/SUPPLEMENTARY_CODE_README.md`.
+The example key `bytes(range(32))` is publicly known and must only be used for testing.
 
-License: Apache-2.0; bibliographic attribution in `CITATION.cff` applies to the public repository only.
+Only load PyTorch checkpoints from trusted sources. Additional information is provided in `SECURITY.md`.
+
+This package is intended to support anonymous evaluation of the K-FRAG V4.15 implementation. Author-identifying information and links to identifying repositories must not be included in the CVPR supplementary submission.
+
+License: Apache-2.0.
+
